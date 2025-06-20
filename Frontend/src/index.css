@@ -33,3 +33,34 @@ body
     color: white;
   }
 }
+
+html.dark body {
+  background-color: #262424; /* or any dark color you prefer */
+  color: #ffffff;
+}
+
+/* Optional: handle text/link colors inside dark mode */
+html.dark a {
+  color: #e2e2e2;
+}
+
+html.dark p, html.dark h1, html.dark span, html.dark li {
+  color: #ffffff;
+}
+
+html.dark .navlink {
+  color: white;
+}
+
+html.dark * {
+  border-color: white; /* Tailwind's border-gray-600 */
+}
+
+html.dark button {
+  background-color: #a0522d; /* lighter brown for dark mode contrast */
+  color: white;
+}
+
+html.dark .navbar-icon {
+  filter: brightness(0) saturate(100%) invert(100%);
+}

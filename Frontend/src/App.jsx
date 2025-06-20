@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import './index.css';
 import { Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home.jsx";
@@ -19,6 +19,19 @@ import PlaceOrder from "./Pages/PlaceOrder.jsx";
 import Verify from "./Pages/Verify.jsx";
 
 function App() {
+
+  useEffect(() =>
+  {
+    const savedTheme = localStorage.getItem("theme");
+    if(savedTheme === "dark")
+    {
+      document.documentElement.classList.add("dark");
+    }
+    else
+    {
+      document.documentElement.classList.remove("dark");
+    }
+}, []);
 
   return (
     <>
