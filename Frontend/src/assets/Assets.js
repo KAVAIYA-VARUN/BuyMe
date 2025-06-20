@@ -110,6 +110,8 @@ import razorpay_logo from './razorpay_logo.png'
 import stripe_logo from './stripe_logo.png'
 import cross_icon from './cross_icon.png'
 import mode_change_icon from './mode_change_icon.png'
+import about_us_img from './about_us_img.jpg'
+import contact_us_img from "./contact_us_img.jpg";
 
 export const Assets =
 {
@@ -132,11 +134,13 @@ export const Assets =
     support_img,
     menu_icon,
     about_img,
+    about_us_img,
     contact_img,
     razorpay_logo,
     stripe_logo,
     cross_icon,
-    mode_change_icon
+    mode_change_icon,
+    contact_us_img
 }
 
 export const Products = [

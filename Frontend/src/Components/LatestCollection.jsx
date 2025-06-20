@@ -5,15 +5,15 @@ import ProductItem from "./ProductItem.jsx";
 
 const LatestCollection = () => {
 
-    const { Products } = useContext(ShopContext);
+    const { products } = useContext(ShopContext);
     // with the help of this useContext we can get the products
 
     const [latestProducts, setLatestProducts] = useState([]);
 
     useEffect(() =>
     {
-        setLatestProducts(Products.slice(0,10));
-    },[]);
+        setLatestProducts(products.slice(0,10));
+    },[products]);
 
     // here we have passed empty array so that the function will be executed once when the component is loaded
 

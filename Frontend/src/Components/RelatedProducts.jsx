@@ -5,20 +5,20 @@ import ProductItem from './ProductItem';
 
 const RelatedProducts = ({category, subCategory}) => {
 
-    const { Products } = useContext(ShopContext);
+    const { products } = useContext(ShopContext);
     const [related, setRelated] = useState([]);
 
     useEffect(() =>
     {
-        if(Products.length > 0)
+        if(products.length > 0)
         {
-            let productsCopy = Products.slice();
+            let productsCopy = products.slice();
             productsCopy = productsCopy.filter((item) => category === item.category);
             productsCopy = productsCopy.filter((item) => subCategory === item.subCategory);
 
             setRelated(productsCopy.slice(0,5));
         }
-    },[Products]);
+    },[products]);
 
   return (
     <>

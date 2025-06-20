@@ -6,29 +6,33 @@ import CartTotal from '../Components/CartTotal.jsx';
 
 const Cart = () => {
 
-  const { Products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext);
+  const { products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext);
 
   const [cartData, setCartData] = useState([]);
 
   useEffect(() =>
   {
-    const tempData = [];
-    for(const items in cartItems)
+    if(products.length > 0)
     {
-      for(const item in cartItems[items])
+      const tempData = [];
+      for(const items in cartItems)
       {
-        if(cartItems[items][item] > 0)
+        for(const item in cartItems[items])
         {
-          tempData.push({
-            _id: items,
-            size: item,
-            quantity: cartItems[items][item]
-          })
+          if(cartItems[items][item] > 0)
+          {
+            tempData.push({
+              _id: items,
+              size: item,
+              quantity: cartItems[items][item]
+            })
+          }
         }
       }
+      setCartData(tempData);
     }
-    setCartData(tempData);
-  },[cartItems]);
+
+  },[cartItems,products]);
 
   return (
    <>
@@ -41,7 +45,7 @@ const Cart = () => {
       {
         cartData.map((item,index) =>
         {
-          const productData = Products.find((product) => product._id.toString() === item._id);
+          const productData = products.find((product) => product._id.toString() === item._id);
 
           return(
             <div key={index} className='py-4 border-t border-b border-gray-500 text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4'>

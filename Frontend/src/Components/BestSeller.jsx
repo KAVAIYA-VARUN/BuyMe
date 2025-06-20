@@ -6,15 +6,15 @@ import { Assets } from '../assets/Assets.js';
 
 const BestSeller = () => {
 
-    const { Products } = useContext(ShopContext);
+    const { products } = useContext(ShopContext);
     const [bestSeller, setBestSeller] = useState([]);
 
     useEffect(() =>
     {
-        const womensBestProducts = Products.filter((item) => (item.bestseller && item.category === "Women"));
-        const mensBestProducts = Products.filter((item) => (item.bestseller && item.category === "Men"));
+        const womensBestProducts = products.filter((item) => (item.bestseller && item.category === "Women"));
+        const mensBestProducts = products.filter((item) => (item.bestseller && item.category === "Men"));
         setBestSeller([...womensBestProducts.slice(0,3), ...mensBestProducts.slice(0,2)]);
-    },[]);
+    },[products]);
 
   return (
     <>

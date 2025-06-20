@@ -7,7 +7,7 @@ import RelatedProducts from '../Components/RelatedProducts.jsx';
 const Product = () => {
 
   const { productId } = useParams();
-  const { Products,currency,addToCart } = useContext(ShopContext);
+  const { products,currency,addToCart } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
@@ -15,7 +15,7 @@ const Product = () => {
   // this might need to change due to the use of async and await
   const fetchProductData = async () =>
   {
-    Products.map((item) =>
+    products.map((item) =>
     {
       if(item._id.toString() === productId)
       {
@@ -29,7 +29,7 @@ const Product = () => {
   useEffect(() =>
   {
     fetchProductData();
-  },[productId, Products]);
+  },[productId, products]);
 
   return productData ? (
   <>
