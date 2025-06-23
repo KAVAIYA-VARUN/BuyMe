@@ -17,6 +17,71 @@ const placeOrder = async (req,res) =>
     {
         const { userId, items, amount, address } = req.body;
 
+        // validation part
+
+        // First name validation
+        if (!/^[A-Za-z\s]+$/.test(firstName) || firstName.length < 4)
+        {
+            return res.json({ success: false, message: "First name must contain only characters and be at least 4 characters long" });
+        }
+
+        // Last name validation
+        if (!/^[A-Za-z\s]+$/.test(lastName) || lastName.length < 4)
+        {
+            return res.json({ success: false, message: "Last name must contain only characters and be at least 4 characters long" });
+        }
+
+        // Email validation
+        if(!validator.isEmail(email))
+        {
+            return res.json({success:false, message: "Please Enter A Valid Email"});
+        }
+
+        // Phone must be 10 digits only
+        if (!/^\d{10}$/.test(phone))
+        {
+            return res.json({ success: false, message: "Phone number must be exactly 10 digits" });
+        }
+
+        // City must be characters only
+        if (!/^[A-Za-z\s]+$/.test(city))
+        {
+            return res.json({ success: false, message: "City must contain characters only" });
+        }
+
+        if (city.length < 3)
+        {
+            return res.json({ success: false, message: "Enter a Valid City" });
+        }
+
+        // State must be characters only
+        if (!/^[A-Za-z\s]+$/.test(state))
+        {
+            return res.json({ success: false, message: "State must contain characters only" });
+        }
+
+        if (state.length < 3)
+        {
+            return res.json({ success: false, message: "Enter a Valid State" });
+        }
+
+        // Country must be characters only
+        if (!/^[A-Za-z\s]+$/.test(country))
+        {
+            return res.json({ success: false, message: "Country must contain characters only" });
+        }
+
+        if (country.length < 4)
+        {
+            return res.json({ success: false, message: "Enter a Valid Country" });
+        }
+
+        // Pincode must be exactly 6 digits
+        if (!/^\d{6}$/.test(pincode))
+        {
+            return res.json({ success: false, message: "Pincode must be a 6-digit number" });
+        }
+
         const orderData =
         {
             userId,
