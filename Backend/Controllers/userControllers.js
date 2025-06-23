@@ -59,6 +59,8 @@ const registerUser = async (req,res) =>
             return res.json({success:false, message: "User Already Exists"});
         }
 
+        // validation part
+
         // validating email format and strong password
         if(!validator.isEmail(email))
         {
@@ -67,7 +69,22 @@ const registerUser = async (req,res) =>
 
         if(password.length < 8)
         {
-            return res.json({success: false, message: "Please Enter A Strong Password"});
+            return res.json({ success: false, message: "Password must be at least 8 characters long" });
+        }
+
+        if(!/[A-Z]/.test(password))
+        {
+            return res.json({ success: false, message: "Password must contain at least one uppercase letter" });
+        }
+
+        if(!/\d/.test(password))
+        {
+            return res.json({ success: false, message: "Password must contain at least one number" });
+        }
+
+        if(!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password))
+        {
+            return res.json({ success: false, message: "Password must contain at least one special character" });
         }
 
         // hashing user password
