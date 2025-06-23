@@ -142,7 +142,7 @@ const placeOrderRazorpay = async (req,res) =>
 {
     try
     {
-
+        // THIS FEATURE OF USING DUMMY DATA IS STOPPED BY THE RAZORPAY
     }
     catch(error)
     {
