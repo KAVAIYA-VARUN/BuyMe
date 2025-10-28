@@ -27,6 +27,26 @@ const userSchema = new mongoose.Schema(
         {
             type: [Object],
         },
+        resetOtp:
+        {
+            type: String,
+            default: ""
+        },
+        resetOtpExpireAt:
+        {
+            type: Number,
+            default: 0
+        },
+        verifyOtp:
+        {
+            type: String,
+            default: ""
+        },
+        verifyOtpExpireAt:
+        {
+            type: Number,
+            default: 0
+        },
         cartData:
         {
             type: Object,

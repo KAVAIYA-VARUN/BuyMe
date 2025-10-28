@@ -2,6 +2,8 @@ import userModel from "../Models/userModel.js";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import transporter from "../Config/nodemailer.js";
+import { PASSWORD_RESET_TEMPLATE } from "../Config/emailtemplates.js";
 
 const createToken = (id) =>
 {
@@ -259,4 +261,94 @@ const getAllUsers = async (req, res) =>
     }
 }
 
-export { loginUser, registerUser, adminLogin, getUser, addAddress, getAllUsers }
+const sendResetOtp = async (req, res) =>
+{
+    const {email} = req.body;
+
+    if(!email)
+    {
+        return res.json({success: false, message: "Email is required"});
+    }
+
+    try
+    {
+        const user = await userModel.findOne({email});
+
+        if(!user)
+        {
+            return res.json({success: false, message: "User not found"});
+        }
+
+        const otp = String(Math.floor(100000 + Math.random() * 900000))
+
+        user.resetOtp = otp;
+        user.resetOtpExpireAt = Date.now() + 15* 60 * 1000;
+
+        await user.save();
+
+        const mailOption =
+        {
+            from: process.env.SENDER_EMAIL,
+            to: user.email,
+            subject: `Password Reset OTP`,
+            /* text: `Your OTP for resetting your password is ${otp}. Use this OTP to proceed with resetting your password`,*/
+            html: PASSWORD_RESET_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", user.email)
+        };
+
+        await transporter.sendMail(mailOption);
+
+        res.json({success: true, message: "OTP sent to your email."});
+    }
+    catch(error)
+    {
+        console.log(error);
+        res.json({success: false, message: error.message});
+    }
+}
+
+const resetPassword = async (req, res) =>
+{
+    const { email, otp, newPassword } = req.body;
+
+    if(!email || !otp || !newPassword)
+    {
+        return res.json({success: false, message: "All fields are required"});
+    }
+
+    try
+    {
+        const user = await userModel.findOne({email});
+
+        if(!user)
+        {
+            return res.json({success: false, message: "User not found"});
+        }
+
+        if(user.resetOtp === "" || user.resetOtp !== otp)
+        {
+            return res.json({success: false, message: "Invalid OTP"});
+        }
+
+        if(user.resetOtpExpireAt < Date.now())
+        {
+            return res.json({success: false, message: "OTP EXPIRED"});
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        user.password = hashedPassword;
+        user.resetOtp = "";
+        user.resetOtpExpireAt = 0;
+
+        await user.save();
+        
+        return res.json({success: true, message: "Password has been reset successfully"});
+    }
+    catch(error)
+    {
+        console.log(error);
+        return res.json({success: false, message: error.message});
+    }
+}
+
+export { loginUser, registerUser, adminLogin, getUser, addAddress, getAllUsers, sendResetOtp, resetPassword }

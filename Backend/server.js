@@ -11,10 +11,11 @@ import orderRouter from "./Routes/orderRoutes.js";
 // App config
 const app = express();
 const PORT = process.env.PORT || 4001;
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
 
 // Middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors({origin: allowedOrigins, credentials: true}));
 connectDB();
 connectCloudinary();
 

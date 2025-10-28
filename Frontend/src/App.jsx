@@ -13,11 +13,12 @@ import Navbar from "./Components/Navbar.jsx";
 import MyOrders from "./Pages/MyOrders.jsx";
 import Footer from "./Components/Footer.jsx";
 import SearchBar from "./Components/SearchBar.jsx";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PlaceOrder from "./Pages/PlaceOrder.jsx";
 import Verify from "./Pages/Verify.jsx";
 import Address from "./Pages/Address.jsx";
+import ForgotPass from "./Pages/ForgotPass.jsx";
 
 function App() {
 
@@ -53,6 +54,7 @@ function App() {
         <Route path="/placeOrder" element={<PlaceOrder />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/address" element={<Address />} />
+        <Route path="/reset-password" element={<ForgotPass />} />
       </Routes>
       <Footer />
   </div>

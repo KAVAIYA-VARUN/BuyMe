@@ -64,8 +64,7 @@ const Login = () => {
     <>
     <form onSubmit={onSubmitHandler} className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto gap-4 text-gray-800 mt-0'>
       <div className='inline-flex items-center gap-2 mb-2 mt-10'>
-        <p className='text-3xl'>{currentState}</p>
-        <hr className='border-none h-[1.5px] w-8 bg-gray-800' />
+        <p className='text-3xl font-semibold'>{currentState}</p>
       </div>
       {
         currentState === "Login" ? "" : <input onChange={(e) => setName(e.target.value)} value={name} type="text" className='w-full px-3 py-2 placeholder-black bg-gray-300' placeholder='Name' required/>
@@ -82,7 +81,7 @@ const Login = () => {
       <input onChange={(e) => setEmail(e.target.value)} value={email} type="email" className='w-full px-3 py-2 placeholder-black bg-gray-300' placeholder='Email Address' required/>
       <input onChange={(e) => setPassword(e.target.value)} value={password} type="password" className='w-full px-3 py-2 placeholder-black bg-gray-300' placeholder='Password' required/>
       <div className='w-full flex justify-between text-sm mt-[-8px]'>
-        <p className='cursor-pointer text-blue-800'>Forgot Your Password?</p>
+        <p onClick={() => navigate("/reset-password")} className='cursor-pointer text-blue-800'>Forgot Your Password?</p>
         {
           currentState === "Login"
           ? <p onClick={() => setCurrentState("Sign Up")} className='cursor-pointer font-semibold text-orange-800'>Create Account</p>
