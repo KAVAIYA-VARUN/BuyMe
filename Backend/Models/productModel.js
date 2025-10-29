@@ -55,6 +55,16 @@ const productSchema = new mongoose.Schema(
         {
             type: Boolean,
         },
+        rating:
+        {
+            type: Number,
+            default: 0
+        },
+        numReviews:
+        {
+            type: Number,
+            default: 0
+        },
         date:
         {
             type: Number,
