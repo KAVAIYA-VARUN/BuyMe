@@ -19,6 +19,7 @@ import PlaceOrder from "./Pages/PlaceOrder.jsx";
 import Verify from "./Pages/Verify.jsx";
 import Address from "./Pages/Address.jsx";
 import ForgotPass from "./Pages/ForgotPass.jsx";
+import Review from "./Pages/Review.jsx";
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
         <Route path="/verify" element={<Verify />} />
         <Route path="/address" element={<Address />} />
         <Route path="/reset-password" element={<ForgotPass />} />
+        <Route path="/write-review" element={<Review />} />
       </Routes>
       <Footer />
   </div>
