@@ -4,14 +4,19 @@ import { ShopContext } from '../Context/ShopContext.jsx';
 import { Assets } from '../assets/Assets.js';
 import RelatedProducts from '../Components/RelatedProducts.jsx';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Product = () => {
 
   const { productId } = useParams();
-  const { products,currency,addToCart, cartItems } = useContext(ShopContext);
+  const { products,currency,addToCart, cartItems, backendUrl } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
+  const [activeTab, setActiveTab] = useState("description");
+  const [reviews, setReviews] = useState([]);
+  const [avgRating, setAvgRating] = useState(0);
+  const [totalReviews, setTotalReviews] = useState(0);
 
   // this might need to change due to the use of async and await
   const fetchProductData = async () =>
@@ -27,9 +32,26 @@ const Product = () => {
     })
   }
 
+  const fetchReviews = async () =>
+  {
+    try
+    {
+      const response = await axios.get(`${backendUrl}/api/review/${productId}`);
+      setReviews(response.data.reviews || []);
+      setAvgRating(response.data.avgRating || 0);
+      setTotalReviews(response.data.totalReviews || 0);
+    }
+    catch(error)
+    {
+      console.log(error.message);
+      toast.error(error.message);
+    }
+  }
+
   useEffect(() =>
   {
     fetchProductData();
+    fetchReviews();
     window.scrollTo({top: 0, behavior: "smooth"}); // this is to smoothly scroll to the top of the window
   },[productId, products]);
 
@@ -68,12 +90,19 @@ const Product = () => {
       <div className='flex-1'>
         <h1 className='font-medium text-2xl mt-2 text-gray-600 '>{productData.name}</h1>
         <div className='flex items-center gap-1 mt-2'>
-          <img src={Assets.star_icon} alt="" className="w-3.5" />
-          <img src={Assets.star_icon} alt="" className="w-3.5" />
-          <img src={Assets.star_icon} alt="" className="w-3.5" />
-          <img src={Assets.star_icon} alt="" className="w-3.5" />
-          <img src={Assets.star_dull_icon} alt="" className="w-3.5" />
-          <p className='pl-2'>(122)</p>
+          {[...Array(5)].map((_, i) => (
+            <img
+              key={i}
+              src={i < Math.round(avgRating) ? Assets.star_icon : Assets.star_dull_icon}
+              alt="star"
+              className="w-3.5"
+            />
+          ))}
+          <p className='pl-2 text-gray-700'>
+            {avgRating > 0
+              ? `${avgRating.toFixed(1)} / 5 (${totalReviews} review${totalReviews !== 1 ? "s" : ""})`
+              : "No ratings yet"}
+          </p>
         </div>
         <div className='mt-5 text-3xl font-medium flex items-center gap-4'>
         {productData.oldPrice && productData.oldPrice !== productData.price && (
@@ -144,15 +173,91 @@ const Product = () => {
     {/* Description And Review Section */}
 
     <div className='mt-20'>
-      <div className='flex'>
-        <p className='border-2 border-gray-500 px-5 py-3 text-sm font-semibold'>Description</p>
-        <p className='border-2 border-gray-500 px-5 py-3 text-sm'>Reviews (122)</p>
+        <div className='flex'>
+          <p 
+            onClick={() => setActiveTab("description")}
+            className={`border-2 border-gray-500 px-5 py-3 text-sm font-semibold cursor-pointer ${activeTab === "description" ? "bg-black text-white" : ""}`}
+          >
+            Description
+          </p>
+          <p 
+            onClick={() => setActiveTab("reviews")}
+            className={`border-2 border-gray-500 px-5 py-3 text-sm cursor-pointer ${activeTab === "reviews" ? "bg-black text-white" : ""}`}
+          >
+            Reviews ({reviews.length})
+          </p>
+        </div>
+
+        {activeTab === "description" && (
+          <div className='flex flex-col gap-4 border-2 border-gray-500 px-6 py-6 text-sm text-gray-500'>
+            <p>{productData.description}</p>
+            <p>Discover premium style and comfort with our carefully curated collection...</p>
+          </div>
+        )}
+
+        {activeTab === "reviews" && (
+          <div className="border-2 border-gray-500 px-6 py-6 text-sm text-gray-600 bg-[#fdf6f0]">
+          <p className="font-semibold text-lg mb-4">
+            Average Rating: ⭐ {avgRating.toFixed(1)} / 5 ({totalReviews} reviews)
+          </p>
+
+            {reviews.length > 0 ? (
+              reviews.map((review, index) => (
+                <div key={index} className="border-b border-gray-300 pb-4 mb-4">
+                  {/* Reviewer name and verification */}
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-gray-900">{review.reviewerName}</p>
+                    {review.verifiedPurchase && (
+                      <span className="text-orange-500 text-xs font-semibold">Verified Purchase</span>
+                    )}
+                  </div>
+
+                  {/* Rating */}
+                  <div className="flex items-center mt-1">
+                    {[...Array(5)].map((_, i) => (
+                      <img
+                        key={i}
+                        src={i < review.rating ? Assets.star_icon : Assets.star_dull_icon}
+                        alt="star"
+                        className="w-3.5"
+                      />
+                    ))}
+                  </div>
+
+                  {/* Review title */}
+                  {review.title && (
+                    <p className="font-semibold mt-2 text-gray-800">{review.title}</p>
+                  )}
+
+                  {/* Review date */}
+                  <p className="text-xs text-gray-500 mt-1">
+                    Reviewed in India on {review.reviewedOn}
+                  </p>
+
+                  {/* Comment */}
+                  <p className="mt-2 text-gray-700">{review.comment}</p>
+
+                  {/* Images (optional) */}
+                  {review.images && review.images.length > 0 && (
+                    <div className="flex gap-2 mt-3 flex-wrap">
+                      {review.images.map((imgUrl, i) => (
+                        <img
+                          key={i}
+                          src={imgUrl}
+                          alt="review"
+                          className="w-24 h-24 object-cover rounded border"
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 italic">No reviews yet for this product.</p>
+            )}
+          </div>
+        )}
       </div>
-      <div className='flex flex-col gap-4 border-2 border-gray-500 px-6 py-6 text-sm text-gray-500'>
-        <p>{productData.description}</p>
-        <p>Discover premium style and comfort with our carefully curated collection. Each piece is crafted with high-quality materials, designed to reflect modern trends while offering long-lasting wear. Whether you're shopping for everyday essentials or standout statement items, our range combines elegance, functionality, and timeless appeal — perfect for upgrading your wardrobe or gifting someone special.</p>
-      </div>
-    </div>
 
     {/* Related Products */}
 

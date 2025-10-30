@@ -100,26 +100,53 @@ const createReview = async (req, res) =>
     catch(error)
     {
         console.log("Error adding review:", error);
-        res.status(400).json({ success: false, message: error.message });
+        res.json({ success: false, message: error.message });
     }
 };
 
 
 const getProductReview = async (req, res) =>
 {
-    try
-    {
-        const { productId } = req.params;
+  try
+  {
+    const { productId } = req.params;
+    const { userId } = req.query;
 
-        const reviews = await reviewModel.find({ product: productId }).populate("user", "name email").sort({ createdAt: -1 });
-
-        res.json({ success: true, reviews });
-    }
-    catch(error)
+    if(!productId)
     {
-        console.log(error);
-        res.status(500).json({ success: false, message: "Error while fetching the review" });
+      return res.json({ success: false, message: "Product ID is required" });
     }
+
+    const filter = { productId };
+    if(userId) filter.userId = userId;
+
+    const reviews = await reviewModel.find({productId})
+    .populate("userId", "name email")
+    .sort({ createdAt: -1 });
+
+    const formattedReviews = reviews.map(review => ({
+      reviewerName: review.userId?.name || "Anonymous",
+      verifiedPurchase: true,
+      rating: review.rating,
+      reviewedOn: review.createdAt.toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" }),
+      comment: review.comment,
+      images: review.images?.map(img => img.url),
+    }));
+
+    let avgRating = 0;
+    if(reviews.length > 0)
+    {
+        const total = reviews.reduce((sum, r) => sum + r.rating, 0);
+        avgRating = total / reviews.length;
+    }
+
+    res.json({ success: true, reviews: formattedReviews, avgRating, totalReviews: reviews.length });
+  }
+  catch(error)
+  {
+    console.log(error);
+    res.json({ success: false, message: "Error while fetching the review" });
+  }
 };
 
 
@@ -154,7 +181,7 @@ const deleteReview = async (req, res) =>
     catch(error)
     {
         console.log(error);
-        res.status(500).json({ success: false, message: "Error while deleting the review" });
+        res.json({ success: false, message: "Error while deleting the review" });
     }
 };
 
