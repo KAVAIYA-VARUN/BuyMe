@@ -95,7 +95,7 @@ const Product = () => {
               key={i}
               src={i < Math.round(avgRating) ? Assets.star_icon : Assets.star_dull_icon}
               alt="star"
-              className="w-3.5"
+              className="w-4.5"
             />
           ))}
           <p className='pl-2 text-gray-700'>
