@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { ShopContext } from "../Context/ShopContext.jsx";
 import Title from '../Components/Title.jsx'
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
 
@@ -11,6 +12,7 @@ const EditProfile = () => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
@@ -70,6 +72,11 @@ const EditProfile = () => {
     }
   };
 
+  const handleClick = () =>
+  {
+    navigate("/profile"); // 👈 change route as needed
+  };
+
   return (
     <div className="flex flex-col justify-center items-center bg-[#F5E8DF]">
       <div className='text-3xl text-center mb-10'>
@@ -120,6 +127,7 @@ const EditProfile = () => {
         <button
           type="submit"
           disabled={loading}
+          onClick={handleClick}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md transition-all"
         >
           {loading ? "Updating..." : "Save Changes"}

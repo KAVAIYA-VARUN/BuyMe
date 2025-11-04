@@ -69,7 +69,7 @@ const Profile = () => {
 
   return (
     <>
-    <div className="min-h-screen bg-[#F5E8DF] dark:bg-gray-900 py-8">
+    <div className="min-h-screen bg-[#F5E8DF] dark:bg-gray-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className='text-3xl text-center mb-10'>
             <Title text1={"MY"} text2={"PROFILE"} />
@@ -109,10 +109,10 @@ const Profile = () => {
               <div className="bg-[#FCD8CD] dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">Profile Information</h2>
-                  <button onClick={() => navigate("/edit-profile")} className="ml-6 flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:underline">
+                  <button onClick={() => navigate("/edit-profile")} className="ml-6 flex items-center space-x-2 text-black hover:text-blue-600 dark:text-blue-400">
                     <UserPen className="h-4 w-4" /><span>Edit Profile</span>
                   </button>
-                  <button onClick={() => navigate("/address")} className="ml-6 flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:underline">
+                  <button onClick={() => navigate("/address")} className="ml-6 flex items-center space-x-2 text-black hover:text-blue-600 dark:text-blue-400">
                     <MapPin className="h-4 w-4" /><span>Add Address</span>
                   </button>
                 </div>

@@ -203,7 +203,7 @@ const Product = () => {
 
             {reviews.length > 0 ? (
               reviews.map((review, index) => (
-                <div key={index} className="border-b border-gray-300 pb-4 mb-4">
+                <div key={index} className="border-b border-black pb-4 mb-4">
                   {/* Reviewer name and verification */}
                   <div className="flex items-center gap-2">
                     <p className="font-semibold text-gray-900">{review.reviewerName}</p>
@@ -224,15 +224,15 @@ const Product = () => {
                     ))}
                   </div>
 
-                  {/* Review title */}
-                  {review.title && (
-                    <p className="font-semibold mt-2 text-gray-800">{review.title}</p>
-                  )}
-
                   {/* Review date */}
                   <p className="text-xs text-gray-500 mt-1">
-                    Reviewed in India on {review.reviewedOn}
+                    Reviewed on {review.reviewedOn}
                   </p>
+
+                  {/* Review title */}
+                  {review?.title && (
+                    <p className="font-semibold mt-2 text-gray-800">{review.title}</p>
+                  )}
 
                   {/* Comment */}
                   <p className="mt-2 text-gray-700">{review.comment}</p>

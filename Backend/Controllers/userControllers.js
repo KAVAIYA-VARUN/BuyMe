@@ -251,7 +251,7 @@ const getAllUsers = async (req, res) =>
             return res.json({ success: false, message: "Admin access only" });
         }
 
-        const users = await userModel.find().select("-password");
+        const users = await userModel.find().select("-password").sort({ _id: -1 });
 
         res.status(200).json({success: true,users});
     }

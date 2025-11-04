@@ -5,7 +5,7 @@ import axios from 'axios';
 import { ShopContext } from '../Context/ShopContext.jsx';
 import Title from '../Components/Title.jsx';
 
-const Review = () => 
+const Review = () =>
 {
   const { backendUrl, token } = useContext(ShopContext);
   const location = useLocation();
@@ -21,14 +21,14 @@ const Review = () =>
   const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // fetch user name once on mount
   useEffect(() =>
   {
     const fetchUserName = async () =>
     {
       try
       {
-        if (!token)
+        const storedToken = token || localStorage.getItem('token');
+        if (!storedToken)
         {
           toast.error('Please login to write a review');
           navigate('/login');
@@ -36,10 +36,9 @@ const Review = () =>
         }
 
         const { data } = await axios.get(`${backendUrl}/api/user/profile`, {
-          headers: { token: token }
+          headers: { token: storedToken }
         });
 
-        // your controller returns user object directly
         if (data && data.name)
         {
           setName(data.name);
@@ -117,8 +116,7 @@ const Review = () =>
     try
     {
       const formData = new FormData();
-      // product id: try product.product (from order item) else _id
-      const productId = product.product || product._id || product.id;
+      const productId = product._id;
       formData.append('productId', productId);
       formData.append('title', title);
       formData.append('comment', comment);

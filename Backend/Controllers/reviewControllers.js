@@ -7,7 +7,7 @@ const createReview = async (req, res) =>
 {
     try
     {
-        const { productId, rating, comment, userId } = req.body;
+        const { productId, rating, comment, userId, title } = req.body;
         console.log("Review Data: ", req.body);
 
         const numericRating = Number(rating);
@@ -70,7 +70,8 @@ const createReview = async (req, res) =>
             userId,
             rating: numericRating,
             comment,
-            images: imageLinks
+            images: imageLinks,
+            title
         };
 
         console.log("Final Review Data: ", reviewData);
@@ -126,6 +127,7 @@ const getProductReview = async (req, res) =>
 
     const formattedReviews = reviews.map(review => ({
       reviewerName: review.userId?.name || "Anonymous",
+      title: review.title || " ",
       verifiedPurchase: true,
       rating: review.rating,
       reviewedOn: review.createdAt.toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" }),
