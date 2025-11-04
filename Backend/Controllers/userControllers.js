@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import transporter from "../Config/nodemailer.js";
 import { PASSWORD_RESET_TEMPLATE } from "../Config/emailtemplates.js";
+import { v2 as cloudinary } from "cloudinary";
 
 const createToken = (id) =>
 {
@@ -351,4 +352,66 @@ const resetPassword = async (req, res) =>
     }
 }
 
-export { loginUser, registerUser, adminLogin, getUser, addAddress, getAllUsers, sendResetOtp, resetPassword }
+const editProfile = async (req, res) =>
+{
+    try
+    {
+        const { name } = req.body;
+
+        if(!name)
+        {
+            return res.json({message: "Name is required"});
+        }
+
+        const token = req.headers.token;
+
+        if(!token)
+        {
+            return res.json({ success: false, message: "Not Authorized" });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id;
+
+        let imageUrl = null;
+
+        if(req.file)
+        {
+            const uploadResponse = await cloudinary.uploader.upload(req.file.path,
+                {
+                    folder: "buyme_users",
+                }
+            );
+
+            imageUrl = uploadResponse.secure_url;
+        }
+
+        const updatedUser = await userModel.findByIdAndUpdate(
+        userId,
+        {
+            ...(name && { name }),
+            ...(imageUrl && { image: imageUrl }),
+        },
+        { new: true }
+        );
+
+        if(!updatedUser)
+        {
+            return res.json({ success: false, message: "User not found" });
+        }
+
+        return res.json(
+        {
+            success: true,
+            message: "Profile updated successfully",
+            user: updatedUser,
+        });
+    }
+    catch(error)
+    {
+        console.log(error);
+        return res.json({success: false, message: "Error updating the profile"});
+    }
+}
+
+export { loginUser, registerUser, adminLogin, getUser, addAddress, getAllUsers, sendResetOtp, resetPassword, editProfile }

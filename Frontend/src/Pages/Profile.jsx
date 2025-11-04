@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { User, Package, LogOut, Settings, MapPin  } from 'lucide-react'
-import Title from '../Components/Title'
+import { User, Package, LogOut, Settings, MapPin, UserPen  } from 'lucide-react'
+import Title from '../Components/Title.jsx'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import axios from "axios";
@@ -80,11 +80,15 @@ const Profile = () => {
             <div className="md:col-span-1">
               <div className="bg-[#FCD8CD] dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <div className="text-center mb-6">
-                  <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-24 h-24 bg-blue-600 rounded-full overflow-hidden flex items-center justify-center mx-auto mb-4">
+                  {user.image ? (
+                    <img className='w-full h-full object-cover' src={user.image} alt="Profile" />
+                  ) : (
                     <User className="h-10 w-10 text-white" />
-                  </div>
+                  )}
+                </div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">{user.name}</h2>
-                  <p className="text-gray-600 dark:text-gray-400">{user.email}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm break-words">{user.email}</p>
                 </div>
                 <nav className="space-y-2">
                   <Link to="/profile" className="flex items-center space-x-3 px-4 py-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900 rounded-lg">
@@ -105,7 +109,10 @@ const Profile = () => {
               <div className="bg-[#FCD8CD] dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">Profile Information</h2>
-                  <button onClick={() => navigate("/address")} className="flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:underline">
+                  <button onClick={() => navigate("/edit-profile")} className="ml-6 flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:underline">
+                    <UserPen className="h-4 w-4" /><span>Edit Profile</span>
+                  </button>
+                  <button onClick={() => navigate("/address")} className="ml-6 flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:underline">
                     <MapPin className="h-4 w-4" /><span>Add Address</span>
                   </button>
                 </div>

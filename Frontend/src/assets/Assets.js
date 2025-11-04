@@ -112,6 +112,7 @@ import cross_icon from './cross_icon.png'
 import mode_change_icon from './mode_change_icon.png'
 import about_us_img from './about_us_img.jpg'
 import contact_us_img from "./contact_us_img.jpg";
+import edit_profile from "./edit_profile.png";
 
 export const Assets =
 {
@@ -140,7 +141,8 @@ export const Assets =
     stripe_logo,
     cross_icon,
     mode_change_icon,
-    contact_us_img
+    contact_us_img,
+    edit_profile
 }
 
 export const Products = [

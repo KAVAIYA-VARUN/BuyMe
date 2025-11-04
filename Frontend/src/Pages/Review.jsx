@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { ShopContext } from '../Context/ShopContext.jsx';
+import Title from '../Components/Title.jsx';
 
 const Review = () => 
 {
@@ -150,6 +151,10 @@ const Review = () =>
   };
 
   return (
+    <>
+    <div className='text-3xl text-center mb-10'>
+        <Title text1={"PRODUCT"} text2={"REVIEW"} />
+    </div>
     <div className="max-w-2xl mx-auto p-6 mt-8 bg-[#FCD8CD] shadow-lg rounded-lg">
       {/* Product display */}
       <div className="flex items-center gap-4 mb-6">
@@ -226,6 +231,7 @@ const Review = () =>
         </button>
       </form>
     </div>
+    </>
   );
 };
 
