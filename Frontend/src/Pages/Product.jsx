@@ -196,7 +196,7 @@ const Product = () => {
         )}
 
         {activeTab === "reviews" && (
-          <div className="border-2 border-gray-500 px-6 py-6 text-sm text-gray-600 bg-[#FCD8CD]">
+          <div className="border-2 dark:bg-transparent border-gray-500 px-6 py-6 text-sm text-gray-600 bg-[#FCD8CD]">
           <p className="font-semibold text-lg mb-4">
             Average Rating: ⭐ {avgRating.toFixed(1)} / 5 ({totalReviews} reviews)
           </p>

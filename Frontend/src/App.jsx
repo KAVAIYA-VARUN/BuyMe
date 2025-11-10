@@ -21,6 +21,7 @@ import Address from "./Pages/Address.jsx";
 import ForgotPass from "./Pages/ForgotPass.jsx";
 import Review from "./Pages/Review.jsx";
 import EditProfile from "./Pages/EditProfile.jsx";
+import OrderConfirmation from "./Pages/OrderConfirmation.jsx";
 
 function App() {
 
@@ -59,6 +60,7 @@ function App() {
         <Route path="/reset-password" element={<ForgotPass />} />
         <Route path="/write-review" element={<Review />} />
         <Route path="/edit-profile" element={<EditProfile />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
       </Routes>
       <Footer />
   </div>

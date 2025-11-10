@@ -78,13 +78,13 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center bg-[#F5E8DF]">
+    <div className="flex flex-col justify-center items-center dark:bg-transparent bg-[#F5E8DF]">
       <div className='text-3xl text-center mb-10'>
         <Title text1={"EDIT"} text2={"PROFILE"} />
       </div>
       <form
         onSubmit={handleSubmit}
-        className="bg-[#FCD8CD] shadow-lg rounded-2xl p-8 w-full max-w-md"
+        className="bg-[#FCD8CD] dark:bg-black shadow-lg rounded-2xl p-8 w-full max-w-md"
       >
         <h2 className="text-2xl font-semibold mb-6 text-center">
           Edit Profile
