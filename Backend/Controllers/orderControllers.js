@@ -309,11 +309,38 @@ const updateStatus = async (req,res) =>
     {
         const { orderId, status } = req.body;
 
+        if(status === "Cancelled")
+        {
+            return res.json({ success: false, message: "Orders can only be cancelled by the customer" });
+        }
+
         const order = await orderModel.findByIdAndUpdate(orderId, { status });
 
         if(!order)
         {
             return res.json({success: false, message: "Order Not found"});
+        }
+
+        if(order.status === "Cancelled")
+        {
+            return res.json({
+                success: false,
+                message: "Cannot update status of a cancelled order",
+                currentStatus: order.status
+            });
+        }
+
+        
+        if (status === "Cancelled")
+        {
+            order.status = "Cancelled";
+            await order.save();
+
+            return res.json({
+                success: true,
+                message: "Order marked as cancelled successfully",
+                order
+            });
         }
 
         order.status = status;
@@ -360,4 +387,45 @@ const getUserInvoiceOrders = async (req,res) =>
     }
 }
 
-export { placeOrder, placeOrderStripe, placeOrderRazorpay, allOrders, userOrders, updateStatus, verifyStripe, getUserInvoiceOrders }
+const cancelOrder = async (req, res) =>
+{
+    try
+    {
+        const { orderId } = req.body;
+
+        const order = await orderModel.findById(orderId);
+
+        if(!order)
+        {
+            return res.json({success: false, message: "Order not found"});
+        }
+
+        if(order.status === "Shipped" || order.status === "Delivered" || order.status === "Out For Delivery")
+        {
+            return res.json({success: false, message: "Order cannot be cancelled after shipping"});
+        }
+
+        order.status = "Cancelled";
+
+        await order.save();
+
+        for(const item of order.items)
+        {
+            const product = await productModel.findById(item._id);
+            if(product)
+            {
+                product.stock += item.quantity;
+                await product.save();
+            }
+        }
+
+        return res.json({success: true, message: "Order cancelled successfully", order});
+    }
+    catch(error)
+    {
+        console.log(error);
+        res.json({success: false, message: error.message});
+    }
+}
+
+export { placeOrder, placeOrderStripe, placeOrderRazorpay, allOrders, userOrders, updateStatus, verifyStripe, getUserInvoiceOrders, cancelOrder }

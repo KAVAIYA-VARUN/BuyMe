@@ -63,13 +63,14 @@ const Dashboard = ({ token }) =>
       const orders = ordersRes.data.orders || [];
 
       const totalRevenue = orders.reduce((sum, order) => {
-      if (order.payment === true) {
+      if (order.payment === true && order.status.toLowerCase() === "delivered") {
         return sum + (order.amount || 0);
       }
       return sum;
       }, 0);
 
-      const pendingOrders = orders.filter((order) => order.status.toLowerCase() !== "delivered").length;
+      const pendingOrders = orders.filter((order) => order.status.toLowerCase() !== "delivered"  &&
+      order.status.toLowerCase() !== "cancelled").length;
 
       setStats({
         totalProducts: products.length,
@@ -147,14 +148,21 @@ const Dashboard = ({ token }) =>
                       ₹{order.amount.toLocaleString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        order.payment ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                      }`}>
-                        {order.payment ? 'Paid' : 'Unpaid'}
-                      </span>
+                      {order.status === "Cancelled" ? (
+                            <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-400 text-black">
+                              —
+                            </span>
+                        ) : (
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              order.payment ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                            }`}>
+                              {order.payment ? 'Paid' : 'Unpaid'}
+                            </span>
+                        )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                         order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                         order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
                         order.status === 'shipped' ? 'bg-purple-100 text-purple-800' :
