@@ -1,7 +1,9 @@
 import React from 'react'
 import { Assets } from '../assets/Assets'
+import { Link } from "react-router-dom";
 
 const Footer = () => {
+
   return (
     <>
     <div>
@@ -14,8 +16,8 @@ const Footer = () => {
             <div>
                 <p className='text-xl font-semibold mb-5'>COMPANY</p>
                 <ul className='flex flex-col gap-1 text-gray-700'>
-                    <li>HOME</li>
-                    <li>ABOUT US</li>
+                    <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}><li>HOME</li></Link>
+                    <Link to="/about" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}><li>ABOUT US</li></Link>
                     <li>DELIVERY</li>
                     <li>PRIVACY POLICY</li>
                 </ul>

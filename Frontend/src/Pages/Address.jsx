@@ -129,26 +129,27 @@ const Address = () =>
                     <div className="md:col-span-1">
                         <div className="bg-[#FCD8CD] dark:bg-gray-800 rounded-lg shadow-md p-6">
                             <div className="text-center mb-6">
-                                <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <User className="h-10 w-10 text-white" />
+                                <div className="w-24 h-24 bg-blue-600 rounded-full overflow-hidden flex items-center justify-center mx-auto mb-4">
+                                    {user.image ? (
+                                        <img className='w-full h-full object-cover' src={user.image} alt="Profile" />
+                                    ) : (
+                                        <User className="h-10 w-10 text-white" />
+                                    )}
                                 </div>
-                                <h2 className="text-xl font-bold text-gray-900 dark:text-white">{user.name}</h2>
-                                <p className="text-gray-600 dark:text-gray-400">{user.email}</p>
+                                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">{user.name}</h2>
+                                    <p className="text-gray-600 dark:text-gray-400 text-sm break-words">{user.email}</p>
                             </div>
-                            <nav className="space-y-2">
-                                <Link to="/profile" className="flex items-center space-x-3 px-4 py-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900 rounded-lg">
-                                    <User className="h-5 w-5" />
-                                    <span>Profile</span>
-                                </Link>
-                                <Link to="/myOrders" className="flex items-center space-x-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
-                                    <Package className="h-5 w-5" />
-                                    <span>My Orders</span>
-                                </Link>
-                                <button onClick={logout} className="w-full flex items-center space-x-3 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg">
-                                    <LogOut className="h-5 w-5" />
-                                    <span>Logout</span>
-                                </button>
-                            </nav>
+                                <nav className="space-y-2">
+                                    <Link to="/profile" className="flex items-center space-x-3 px-4 py-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                                        <User className="h-5 w-5" /><span>Profile</span>
+                                    </Link>
+                                    <Link to="/myOrders" className="flex items-center space-x-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
+                                        <Package className="h-5 w-5" /><span>My Orders</span>
+                                    </Link>
+                                    <button onClick={logout} className="w-full flex items-center space-x-3 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg">
+                                        <LogOut className="h-5 w-5" /><span>Logout</span>
+                                    </button>
+                                </nav>
                         </div>
                     </div>
 

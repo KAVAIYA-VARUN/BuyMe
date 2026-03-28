@@ -1,8 +1,10 @@
+import { ORDER_TEMPLATE } from "../Config/emailTemplates.js";
 import orderModel from "../Models/orderModel.js"
 import productModel from "../Models/productModel.js";
 import userModel from "../Models/userModel.js";
 import Stripe from "stripe";
 import validator from "validator";
+import transporter from "../Config/nodemailer.js";
 
 // Global Variables
 const currency = "usd";
@@ -109,6 +111,51 @@ const placeOrder = async (req,res) =>
 
         const newOrder = new orderModel(orderData);
         await newOrder.save();
+
+        const user = await userModel.findById(userId);
+        if (!user)
+        {
+            return res.json({ success: false, message: "User not found" });
+        }
+
+        let itemsHtml = items.map(item => `
+            <tr>
+                <td style="padding:12px; border-bottom:1px solid #e5e7eb;">
+                    ${item.name}
+                </td>
+                <td align="center" style="padding:12px; border-bottom:1px solid #e5e7eb;">
+                    ${item.quantity}
+                </td>
+                <td align="right" style="padding:12px; border-bottom:1px solid #e5e7eb;">
+                    ₹${item.price}
+                </td>
+            </tr>
+        `).join("");
+
+        const fullAddress = `
+            ${firstName} ${lastName}<br/>
+            ${city}, ${state}<br/>
+            ${country} - ${pincode}<br/>
+            Phone: ${phone}
+        `;
+
+        let template = ORDER_TEMPLATE
+            .replace(/{{order_status}}/g, "🎉 Order Confirmed!")
+            .replace(/{{status_message}}/g, `Hi ${firstName}, your order has been placed successfully.`)
+            .replace(/{{order_id}}/g, newOrder._id)
+            .replace(/{{items}}/g, itemsHtml)
+            .replace(/{{total_amount}}/g, amount)
+            .replace(/{{delivery_address}}/g, fullAddress)
+            .replace(/{{year}}/g, new Date().getFullYear());
+
+        const mailOption = {
+            from: process.env.SENDER_EMAIL,
+            to: user.email,
+            subject: "Order Confirmed - BuyMe",
+            html: template
+        };
+
+        await transporter.sendMail(mailOption);
 
         // decrement of the stock after ordering
         for(const item of items)
