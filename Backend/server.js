@@ -12,7 +12,7 @@ import reviewRouter from "./Routes/reviewRoutes.js";
 // App config
 const app = express();
 const PORT = process.env.PORT || 4001;
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http://locahost:5175'];
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http://locahost:5175', 'https://ecommerce-buy-me.onrender.com'];
 
 // Middlewares
 app.use(express.json());
