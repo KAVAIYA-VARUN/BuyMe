@@ -86,7 +86,6 @@ import product85 from "./product85.jpg";
 import product86 from "./product86.jpg";
 import product87 from "./product87.jpg";
 
-import BUYMELOGO from './BUYMELOGO.png'
 import BUYMELOGO2 from './BUYMELOGO2.png'
 import BUYMELOGO3 from './BUYMELOGO3.png'
 import BUYMELOGO4 from './BUYMELOGO4.png'
@@ -116,7 +115,6 @@ import edit_profile from "./edit_profile.png";
 
 export const Assets =
 {
-    BUYMELOGO,
     BUYMELOGO2,
     BUYMELOGO3,
     BUYMELOGO4,
