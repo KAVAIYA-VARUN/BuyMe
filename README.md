@@ -7,7 +7,7 @@ BuyMe is a modern, full-featured **E-Commerce web application** built using the 
 ## 🚀 Live Demo
 
 - 🌐 Web App: https://ecommerce-buy-me.onrender.com  
-- 🛠 Admin Panel: https://buy-me-admin.onrender.com 
+- 🛠 Admin Panel: https://buy-me-admin.onrender.com
 
 ---
 
