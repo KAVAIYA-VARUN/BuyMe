@@ -49,7 +49,7 @@ BuyMe/
 - Multiple address support
 - JWT-based authentication
 - Dark / Light mode toggle
-- Invoice generation using `window.print()`
+- Invoice generation
 
 ---
 
