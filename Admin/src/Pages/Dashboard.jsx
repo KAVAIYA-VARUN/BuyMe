@@ -37,7 +37,7 @@ const Dashboard = ({ token }) =>
     {
       title: "Total Revenue",
       value: `₹${stats.totalRevenue.toLocaleString()}`,
-      icon: DollarSign,
+      icon: () => <span className="text-white text-2xl font-bold">₹</span>,
       color: "bg-purple-500",
     },
     {
