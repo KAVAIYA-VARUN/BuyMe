@@ -63,6 +63,10 @@ const registerUser = async (req,res) =>
 {
     try
     {
+        console.log("ENV CHECK:");
+        console.log("SMTP_USER:", process.env.SMTP_USER);
+        console.log("SMTP_PASS:", process.env.SMTP_PASS ? "EXISTS" : "MISSING");
+        console.log("SENDER:", process.env.SENDER_EMAIL);
         const { name, email, password, phone } = req.body;
 
         // checking if the user already exists
