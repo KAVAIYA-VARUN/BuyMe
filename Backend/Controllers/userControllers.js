@@ -309,7 +309,7 @@ const sendResetOtp = async (req, res) =>
 
         await transporter.sendMail(mailOption);
 
-        res.json({success: true, message: "OTP sent to your email."});
+        return res.json({success: true, message: "OTP sent to your email."});
     }
     catch(error)
     {
