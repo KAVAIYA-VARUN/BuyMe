@@ -320,7 +320,7 @@ const placeOrder = async (req,res) =>
         sendEmail(
             user.email,
             "Order Confirmed - BuyMe",
-            template
+            ORDER_TEMPLATE
         );
     }
     catch(error)
