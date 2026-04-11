@@ -317,11 +317,24 @@ const placeOrder = async (req,res) =>
         //     }
         // });
 
-        sendEmail(
-            user.email,
-            "Order Confirmed - BuyMe",
-            ORDER_TEMPLATE
-        );
+        setImmediate(async () =>
+        {
+            try
+            {
+                const user = await userModel.findById(userId);
+                if (!user) return;
+
+                await sendEmail(
+                    user.email,
+                    "Order Confirmed - BuyMe",
+                    ORDER_TEMPLATE
+                );
+            }
+            catch(err)
+            {
+                console.log("Email error:", err);
+            }
+        });
     }
     catch(error)
     {
