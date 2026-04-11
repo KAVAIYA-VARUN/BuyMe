@@ -15,6 +15,171 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 
 // Placing order using COD method
+// const placeOrder = async (req,res) =>
+// {
+//     try
+//     {
+//         const { userId, items, amount, address } = req.body;
+
+//         const { firstName, lastName, email, phone, city, state, country, pincode } = address;
+
+//         // validation part
+
+//         // First name validation
+//         if (!/^[A-Za-z\s]+$/.test(firstName) || firstName.length < 4)
+//         {
+//             return res.json({ success: false, message: "First name must contain only characters and be at least 4 characters long" });
+//         }
+
+//         // Last name validation
+//         if (!/^[A-Za-z\s]+$/.test(lastName) || lastName.length < 4)
+//         {
+//             return res.json({ success: false, message: "Last name must contain only characters and be at least 4 characters long" });
+//         }
+
+//         // Email validation
+//         if(!validator.isEmail(email))
+//         {
+//             return res.json({success:false, message: "Please Enter A Valid Email"});
+//         }
+
+//         // Phone must be 10 digits only
+//         if (!/^\d{10}$/.test(phone))
+//         {
+//             return res.json({ success: false, message: "Phone number must be exactly 10 digits" });
+//         }
+
+//         // City must be characters only
+//         if (!/^[A-Za-z\s]+$/.test(city))
+//         {
+//             return res.json({ success: false, message: "City must contain characters only" });
+//         }
+
+//         if (city.length < 3)
+//         {
+//             return res.json({ success: false, message: "Enter a Valid City" });
+//         }
+
+//         // State must be characters only
+//         if (!/^[A-Za-z\s]+$/.test(state))
+//         {
+//             return res.json({ success: false, message: "State must contain characters only" });
+//         }
+
+//         if (state.length < 3)
+//         {
+//             return res.json({ success: false, message: "Enter a Valid State" });
+//         }
+
+//         // Country must be characters only
+//         if (!/^[A-Za-z\s]+$/.test(country))
+//         {
+//             return res.json({ success: false, message: "Country must contain characters only" });
+//         }
+
+//         if (country.length < 4)
+//         {
+//             return res.json({ success: false, message: "Enter a Valid Country" });
+//         }
+
+//         // Pincode must be exactly 6 digits
+//         if (!/^\d{6}$/.test(pincode))
+//         {
+//             return res.json({ success: false, message: "Pincode must be a 6-digit number" });
+//         }
+
+//         // checking for the stock availability
+//         for(const item of items)
+//         {
+//             const product = await productModel.findById(item._id);
+//             if(!product || product.stock <= 0)
+//             {
+//                 return res.json({success: false, message: `${item.name} is not available`});
+//             }
+//         }
+
+//         const orderData =
+//         {
+//             userId,
+//             items,
+//             address,
+//             amount,
+//             paymentMethod: "COD",
+//             payment: false,
+//             date: Date.now()
+//         }
+
+//         const newOrder = new orderModel(orderData);
+//         await newOrder.save();
+
+//         const user = await userModel.findById(userId);
+//         if (!user)
+//         {
+//             return res.json({ success: false, message: "User not found" });
+//         }
+
+//         let itemsHtml = items.map(item => `
+//             <tr>
+//                 <td style="padding:12px; border-bottom:1px solid #e5e7eb;">
+//                     ${item.name}
+//                 </td>
+//                 <td align="center" style="padding:12px; border-bottom:1px solid #e5e7eb;">
+//                     ${item.quantity}
+//                 </td>
+//                 <td align="right" style="padding:12px; border-bottom:1px solid #e5e7eb;">
+//                     ₹${item.price}
+//                 </td>
+//             </tr>
+//         `).join("");
+
+//         const fullAddress = `
+//             ${firstName} ${lastName}<br/>
+//             ${city}, ${state}<br/>
+//             ${country} - ${pincode}<br/>
+//             Phone: ${phone}
+//         `;
+
+//         let template = ORDER_TEMPLATE
+//             .replace(/{{order_status}}/g, "🎉 Order Confirmed!")
+//             .replace(/{{status_message}}/g, `Hi ${firstName}, your order has been placed successfully.`)
+//             .replace(/{{order_id}}/g, newOrder._id)
+//             .replace(/{{items}}/g, itemsHtml)
+//             .replace(/{{total_amount}}/g, amount)
+//             .replace(/{{delivery_address}}/g, fullAddress)
+//             .replace(/{{year}}/g, new Date().getFullYear());
+
+//         const mailOption = {
+//             from: process.env.SENDER_EMAIL,
+//             to: user.email,
+//             subject: "Order Confirmed - BuyMe",
+//             html: template
+//         };
+
+//         await transporter.sendMail(mailOption);
+
+//         // decrement of the stock after ordering
+//         for(const item of items)
+//         {
+//             await productModel.findByIdAndUpdate(item._id,
+//                 {
+//                     $inc:
+//                     {
+//                         stock: -item.quantity
+//                     }
+//                 }
+//             );
+//         }
+
+//         await userModel.findByIdAndUpdate(userId, {cartData: {}});
+//         return res.json({success: true, message: "Order Placed"});
+//     }
+//     catch(error)
+//     {
+//         console.log(error);
+//         res.json({success: false, message: error.message});
+//     }
+// }
+
 const placeOrder = async (req,res) =>
 {
     try
@@ -23,72 +188,48 @@ const placeOrder = async (req,res) =>
 
         const { firstName, lastName, email, phone, city, state, country, pincode } = address;
 
-        // validation part
-
-        // First name validation
+        // ================= VALIDATIONS =================
         if (!/^[A-Za-z\s]+$/.test(firstName) || firstName.length < 4)
         {
             return res.json({ success: false, message: "First name must contain only characters and be at least 4 characters long" });
         }
 
-        // Last name validation
         if (!/^[A-Za-z\s]+$/.test(lastName) || lastName.length < 4)
         {
             return res.json({ success: false, message: "Last name must contain only characters and be at least 4 characters long" });
         }
 
-        // Email validation
         if(!validator.isEmail(email))
         {
             return res.json({success:false, message: "Please Enter A Valid Email"});
         }
 
-        // Phone must be 10 digits only
         if (!/^\d{10}$/.test(phone))
         {
             return res.json({ success: false, message: "Phone number must be exactly 10 digits" });
         }
 
-        // City must be characters only
-        if (!/^[A-Za-z\s]+$/.test(city))
-        {
-            return res.json({ success: false, message: "City must contain characters only" });
-        }
-
-        if (city.length < 3)
+        if (!/^[A-Za-z\s]+$/.test(city) || city.length < 3)
         {
             return res.json({ success: false, message: "Enter a Valid City" });
         }
 
-        // State must be characters only
-        if (!/^[A-Za-z\s]+$/.test(state))
-        {
-            return res.json({ success: false, message: "State must contain characters only" });
-        }
-
-        if (state.length < 3)
+        if (!/^[A-Za-z\s]+$/.test(state) || state.length < 3)
         {
             return res.json({ success: false, message: "Enter a Valid State" });
         }
 
-        // Country must be characters only
-        if (!/^[A-Za-z\s]+$/.test(country))
-        {
-            return res.json({ success: false, message: "Country must contain characters only" });
-        }
-
-        if (country.length < 4)
+        if (!/^[A-Za-z\s]+$/.test(country) || country.length < 4)
         {
             return res.json({ success: false, message: "Enter a Valid Country" });
         }
 
-        // Pincode must be exactly 6 digits
         if (!/^\d{6}$/.test(pincode))
         {
             return res.json({ success: false, message: "Pincode must be a 6-digit number" });
         }
 
-        // checking for the stock availability
+        // ================= STOCK CHECK =================
         for(const item of items)
         {
             const product = await productModel.findById(item._id);
@@ -98,6 +239,7 @@ const placeOrder = async (req,res) =>
             }
         }
 
+        // ================= CREATE ORDER =================
         const orderData =
         {
             userId,
@@ -112,71 +254,74 @@ const placeOrder = async (req,res) =>
         const newOrder = new orderModel(orderData);
         await newOrder.save();
 
-        const user = await userModel.findById(userId);
-        if (!user)
-        {
-            return res.json({ success: false, message: "User not found" });
-        }
-
-        let itemsHtml = items.map(item => `
-            <tr>
-                <td style="padding:12px; border-bottom:1px solid #e5e7eb;">
-                    ${item.name}
-                </td>
-                <td align="center" style="padding:12px; border-bottom:1px solid #e5e7eb;">
-                    ${item.quantity}
-                </td>
-                <td align="right" style="padding:12px; border-bottom:1px solid #e5e7eb;">
-                    ₹${item.price}
-                </td>
-            </tr>
-        `).join("");
-
-        const fullAddress = `
-            ${firstName} ${lastName}<br/>
-            ${city}, ${state}<br/>
-            ${country} - ${pincode}<br/>
-            Phone: ${phone}
-        `;
-
-        let template = ORDER_TEMPLATE
-            .replace(/{{order_status}}/g, "🎉 Order Confirmed!")
-            .replace(/{{status_message}}/g, `Hi ${firstName}, your order has been placed successfully.`)
-            .replace(/{{order_id}}/g, newOrder._id)
-            .replace(/{{items}}/g, itemsHtml)
-            .replace(/{{total_amount}}/g, amount)
-            .replace(/{{delivery_address}}/g, fullAddress)
-            .replace(/{{year}}/g, new Date().getFullYear());
-
-        const mailOption = {
-            from: process.env.SENDER_EMAIL,
-            to: user.email,
-            subject: "Order Confirmed - BuyMe",
-            html: template
-        };
-
-        await transporter.sendMail(mailOption);
-
-        // decrement of the stock after ordering
+        // ================= UPDATE STOCK =================
         for(const item of items)
         {
             await productModel.findByIdAndUpdate(item._id,
-                {
-                    $inc:
-                    {
-                        stock: -item.quantity
-                    }
-                }
-            );
+            {
+                $inc: { stock: -item.quantity }
+            });
         }
 
+        // ================= CLEAR CART =================
         await userModel.findByIdAndUpdate(userId, {cartData: {}});
-        return res.json({success: true, message: "Order Placed"});
+
+        // ================= SEND RESPONSE FIRST =================
+        res.json({success: true, message: "Order Placed"});
+
+        // ================= BACKGROUND EMAIL =================
+        setImmediate(async () =>
+        {
+            try
+            {
+                const user = await userModel.findById(userId);
+                if(!user) return;
+
+                let itemsHtml = items.map(item => `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td align="center">${item.quantity}</td>
+                        <td align="right">₹${item.price}</td>
+                    </tr>
+                `).join("");
+
+                const fullAddress = `
+                    ${firstName} ${lastName}<br/>
+                    ${city}, ${state}<br/>
+                    ${country} - ${pincode}<br/>
+                    Phone: ${phone}
+                `;
+
+                let template = ORDER_TEMPLATE
+                    .replace(/{{order_status}}/g, "🎉 Order Confirmed!")
+                    .replace(/{{status_message}}/g, `Hi ${firstName}, your order has been placed successfully.`)
+                    .replace(/{{order_id}}/g, newOrder._id)
+                    .replace(/{{items}}/g, itemsHtml)
+                    .replace(/{{total_amount}}/g, amount)
+                    .replace(/{{delivery_address}}/g, fullAddress)
+                    .replace(/{{year}}/g, new Date().getFullYear());
+
+                const mailOption =
+                {
+                    from: process.env.SENDER_EMAIL,
+                    to: user.email,
+                    subject: "Order Confirmed - BuyMe",
+                    html: template
+                };
+
+                await transporter.sendMail(mailOption);
+            }
+            catch(err)
+            {
+                console.log("Email error:", err);
+            }
+        });
+
     }
     catch(error)
     {
         console.log(error);
-        res.json({success: false, message: error.message});
+        return res.json({success:false, message:error.message});
     }
 }
 
