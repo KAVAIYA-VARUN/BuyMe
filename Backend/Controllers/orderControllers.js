@@ -267,7 +267,7 @@ const placeOrder = async (req,res) =>
         await userModel.findByIdAndUpdate(userId, {cartData: {}});
 
         // ================= SEND RESPONSE FIRST =================
-        res.json({success: true, message: "Order Placed"});
+        return res.json({success: true, message: "Order Placed"});
 
         // ================= BACKGROUND EMAIL =================
         // setImmediate(async () =>
