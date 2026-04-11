@@ -2,7 +2,7 @@ import userModel from "../Models/userModel.js";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import transporter from "../Config/nodemailer.js";
+import sendEmail from "../Config/sendEmail.js";
 import { PASSWORD_RESET_TEMPLATE, WELCOME_TEMPLATE } from "../Config/emailTemplates.js";
 import { v2 as cloudinary } from "cloudinary";
 
@@ -145,25 +145,31 @@ const registerUser = async (req,res) =>
 
         res.json({success: true, token});
 
-        setImmediate(async () =>
-        {
-            try
-            {
-                const mailOption =
-                {
-                    from: process.env.SENDER_EMAIL,
-                    to: user.email,
-                    subject: "WELCOME EMAIL",
-                    html: WELCOME_TEMPLATE
-                };
+        // setImmediate(async () =>
+        // {
+        //     try
+        //     {
+        //         const mailOption =
+        //         {
+        //             from: process.env.SENDER_EMAIL,
+        //             to: user.email,
+        //             subject: "WELCOME EMAIL",
+        //             html: WELCOME_TEMPLATE
+        //         };
 
-                await transporter.sendMail(mailOption);
-            }
-            catch (err)
-            {
-                console.log("Email error:", err);
-            }
-        });
+        //         await transporter.sendMail(mailOption);
+        //     }
+        //     catch (err)
+        //     {
+        //         console.log("Email error:", err);
+        //     }
+        // });
+
+        sendEmail(
+            user.email,
+            "WELCOME EMAIL",
+            WELCOME_TEMPLATE
+        );
     }
     catch(error)
     {
