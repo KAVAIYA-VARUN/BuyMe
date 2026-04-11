@@ -270,53 +270,58 @@ const placeOrder = async (req,res) =>
         res.json({success: true, message: "Order Placed"});
 
         // ================= BACKGROUND EMAIL =================
-        setImmediate(async () =>
-        {
-            try
-            {
-                const user = await userModel.findById(userId);
-                if(!user) return;
+        // setImmediate(async () =>
+        // {
+        //     try
+        //     {
+        //         const user = await userModel.findById(userId);
+        //         if(!user) return;
 
-                let itemsHtml = items.map(item => `
-                    <tr>
-                        <td>${item.name}</td>
-                        <td align="center">${item.quantity}</td>
-                        <td align="right">₹${item.price}</td>
-                    </tr>
-                `).join("");
+        //         let itemsHtml = items.map(item => `
+        //             <tr>
+        //                 <td>${item.name}</td>
+        //                 <td align="center">${item.quantity}</td>
+        //                 <td align="right">₹${item.price}</td>
+        //             </tr>
+        //         `).join("");
 
-                const fullAddress = `
-                    ${firstName} ${lastName}<br/>
-                    ${city}, ${state}<br/>
-                    ${country} - ${pincode}<br/>
-                    Phone: ${phone}
-                `;
+        //         const fullAddress = `
+        //             ${firstName} ${lastName}<br/>
+        //             ${city}, ${state}<br/>
+        //             ${country} - ${pincode}<br/>
+        //             Phone: ${phone}
+        //         `;
 
-                let template = ORDER_TEMPLATE
-                    .replace(/{{order_status}}/g, "🎉 Order Confirmed!")
-                    .replace(/{{status_message}}/g, `Hi ${firstName}, your order has been placed successfully.`)
-                    .replace(/{{order_id}}/g, newOrder._id)
-                    .replace(/{{items}}/g, itemsHtml)
-                    .replace(/{{total_amount}}/g, amount)
-                    .replace(/{{delivery_address}}/g, fullAddress)
-                    .replace(/{{year}}/g, new Date().getFullYear());
+        //         let template = ORDER_TEMPLATE
+        //             .replace(/{{order_status}}/g, "🎉 Order Confirmed!")
+        //             .replace(/{{status_message}}/g, `Hi ${firstName}, your order has been placed successfully.`)
+        //             .replace(/{{order_id}}/g, newOrder._id)
+        //             .replace(/{{items}}/g, itemsHtml)
+        //             .replace(/{{total_amount}}/g, amount)
+        //             .replace(/{{delivery_address}}/g, fullAddress)
+        //             .replace(/{{year}}/g, new Date().getFullYear());
 
-                const mailOption =
-                {
-                    from: process.env.SENDER_EMAIL,
-                    to: user.email,
-                    subject: "Order Confirmed - BuyMe",
-                    html: template
-                };
+        //         const mailOption =
+        //         {
+        //             from: process.env.SENDER_EMAIL,
+        //             to: user.email,
+        //             subject: "Order Confirmed - BuyMe",
+        //             html: template
+        //         };
 
-                await transporter.sendMail(mailOption);
-            }
-            catch(err)
-            {
-                console.log("Email error:", err);
-            }
-        });
+        //         await transporter.sendMail(mailOption);
+        //     }
+        //     catch(err)
+        //     {
+        //         console.log("Email error:", err);
+        //     }
+        // });
 
+        sendEmail(
+            user.email,
+            "Order Confirmed - BuyMe",
+            template
+        );
     }
     catch(error)
     {
