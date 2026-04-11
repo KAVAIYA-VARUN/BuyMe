@@ -298,18 +298,29 @@ const sendResetOtp = async (req, res) =>
 
         await user.save();
 
-        const mailOption =
+        res.json({ success: true, message: "OTP sent to your email." });
+
+        setImmediate(async () =>
         {
-            from: process.env.SENDER_EMAIL,
-            to: user.email,
-            subject: `Password Reset OTP`,
-            /* text: `Your OTP for resetting your password is ${otp}. Use this OTP to proceed with resetting your password`,*/
-            html: PASSWORD_RESET_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", user.email)
-        };
+            try
+            {
+                const mailOption =
+                {
+                    from: process.env.SENDER_EMAIL,
+                    to: user.email,
+                    subject: "Password Reset OTP",
+                    html: PASSWORD_RESET_TEMPLATE
+                        .replace("{{otp}}", otp)
+                        .replace("{{email}}", user.email)
+                };
 
-        await transporter.sendMail(mailOption);
-
-        res.json({success: true, message: "OTP sent to your email."});
+                await transporter.sendMail(mailOption);
+            }
+            catch (err)
+            {
+                console.log("Email error:", err);
+            }
+        });
     }
     catch(error)
     {
