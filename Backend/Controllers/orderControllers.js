@@ -4,7 +4,7 @@ import productModel from "../Models/productModel.js";
 import userModel from "../Models/userModel.js";
 import Stripe from "stripe";
 import validator from "validator";
-import transporter from "../Config/nodemailer.js";
+import sendEmail from "../Config/sendEmail.js";
 
 // Global Variables
 const currency = "usd";
