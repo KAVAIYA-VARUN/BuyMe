@@ -65,10 +65,6 @@ const registerUser = async (req,res) =>
 {
     try
     {
-        console.log("ENV CHECK:");
-        console.log("SMTP_USER:", process.env.SMTP_USER);
-        console.log("SMTP_PASS:", process.env.SMTP_PASS ? "EXISTS" : "MISSING");
-        console.log("SENDER:", process.env.SENDER_EMAIL);
         const { name, email, password, phone } = req.body;
 
         // checking if the user already exists
@@ -500,6 +496,14 @@ const googleLogin = async (req, res) =>
 
         // 3. Check if user exists
         let user = await userModel.findOne({ email });
+
+        if(user && user.authType === "local")
+        {
+            return res.json({
+                success: false,
+                message: "Account already exists. Please login with email & password."
+            });
+        }
 
         // 4. If NOT → create user (Google signup)
         if(!user)
