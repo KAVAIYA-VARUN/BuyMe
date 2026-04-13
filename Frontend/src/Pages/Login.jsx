@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ShopContext } from '../Context/ShopContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useGoogleLogin } from '@react-oauth/google';
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
 
@@ -52,6 +54,48 @@ const Login = () => {
     }
   }
 
+  const googleResponse = async (authResult) =>
+  {
+    try
+    {
+      if(authResult?.code)
+      {
+        const response = await axios.post(
+          `${backendUrl}/api/user/google-login`,
+          { code: authResult.code }
+        );
+
+        if(response.data.success)
+        {
+          setToken(response.data.token);
+          localStorage.setItem("token", response.data.token);
+
+          toast.success("Login Successful");
+
+          navigate("/");
+        }
+        else
+        {
+          toast.error(response.data.message);
+        }
+      }
+    }
+    catch(error)
+    {
+      console.log(error);
+      toast.error("Google Login Failed");
+    }
+  }
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: (codeResponse) => googleResponse(codeResponse),
+    onError: (error) => {
+      console.log(error);
+      toast.error("Google Login Failed");
+    },
+    flow: 'auth-code'
+  });
+
   useEffect(() =>
   {
     if(token)
@@ -88,7 +132,11 @@ const Login = () => {
           : <p onClick={() => setCurrentState("Login")} className='cursor-pointer font-semibold text-orange-800'>Login Here</p>
         }
       </div>
-      <button className='bg-black text-white font-semibold px-8 py-2 mt-4'>{currentState === "Login" ? "Sign In" : "Sign Up"}</button>
+      <button className='bg-black text-white font-semibold px-8 py-2 mt-4 w-full'>{currentState === "Login" ? "Sign In" : "Sign Up"}</button>
+      <button type="button" onClick={() => googleLogin()} className="flex items-center justify-center gap-2 bg-black text-white font-semibold border px-6 py-2 mt-2 w-full">
+        <FcGoogle size={20} />
+        Continue with Google
+      </button>
     </form>
     </>
   )

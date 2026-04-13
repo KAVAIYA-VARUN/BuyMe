@@ -1,5 +1,5 @@
 import express from "express";
-import { loginUser, registerUser, adminLogin, getUser, addAddress, getAllUsers, sendResetOtp, resetPassword, editProfile } from "../Controllers/userControllers.js";
+import { loginUser, registerUser, adminLogin, getUser, addAddress, getAllUsers, sendResetOtp, resetPassword, editProfile, googleLogin } from "../Controllers/userControllers.js";
 import adminAuth from "../Middleware/adminAuth.js";
 import upload from "../Middleware/multer.js";
 
@@ -14,5 +14,6 @@ userRouter.get("/allusers", adminAuth, getAllUsers);
 userRouter.post("/send-reset-otp", sendResetOtp);
 userRouter.post("/reset-password", resetPassword);
 userRouter.post("/edit-profile",upload.single("image"), editProfile);
+userRouter.post("/google-login", googleLogin);
 
 export default userRouter;

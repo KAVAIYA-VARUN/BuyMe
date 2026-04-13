@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken";
 import sendEmail from "../Config/sendEmail.js";
 import { PASSWORD_RESET_TEMPLATE, WELCOME_TEMPLATE } from "../Config/emailTemplates.js";
 import { v2 as cloudinary } from "cloudinary";
+import { oauth2client } from "../Config/googleConfig.js";
+import axios from "axios";
 
 const createToken = (id) =>
 {
@@ -474,4 +476,65 @@ const editProfile = async (req, res) =>
     }
 }
 
-export { loginUser, registerUser, adminLogin, getUser, addAddress, getAllUsers, sendResetOtp, resetPassword, editProfile }
+const googleLogin = async (req, res) =>
+{
+    try
+    {
+        const { code } = req.body;
+
+        if(!code)
+        {
+            return res.json({ success: false, message: "No code provided" });
+        }
+
+        // 1. Exchange code for tokens
+        const googleRes = await oauth2client.getToken(code);
+        oauth2client.setCredentials(googleRes.tokens);
+
+        // 2. Get user info from Google
+        const userRes = await axios.get(
+            `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
+        );
+
+        const { email, name, picture } = userRes.data;
+
+        // 3. Check if user exists
+        let user = await userModel.findOne({ email });
+
+        // 4. If NOT → create user (Google signup)
+        if(!user)
+        {
+            user = await userModel.create({
+                name,
+                email,
+                image: picture,
+                authType: "google"
+            });
+        }
+
+        // 5. Generate token using function
+        const token = createToken(user._id);
+
+        return res.json({
+            success: true,
+            token,
+            message: "Google Login Successful"
+        });
+
+        sendEmail(
+            user.email,
+            "WELCOME EMAIL",
+            WELCOME_TEMPLATE
+        );
+    }
+    catch(error)
+    {
+        console.log("Google Auth Error:", error);
+        return res.json({
+            success: false,
+            message: "Google Login Failed"
+        });
+    }
+};
+
+export { loginUser, registerUser, adminLogin, getUser, addAddress, getAllUsers, sendResetOtp, resetPassword, editProfile, googleLogin }
