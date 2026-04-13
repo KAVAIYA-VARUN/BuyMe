@@ -520,12 +520,6 @@ const googleLogin = async (req, res) =>
             token,
             message: "Google Login Successful"
         });
-
-        sendEmail(
-            user.email,
-            "WELCOME EMAIL",
-            WELCOME_TEMPLATE
-        );
     }
     catch(error)
     {
