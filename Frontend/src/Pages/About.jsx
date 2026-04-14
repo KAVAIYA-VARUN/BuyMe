@@ -22,15 +22,15 @@ const About = () => {
       <Title text1={"WHY"} text2={"CHOOSE US"} />
     </div>
     <div className='flex flex-col md:flex-row text-sm mb-20'>
-      <div className='border border-gray-400 px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
+      <div className='border dark:text-white border-gray-400 px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
         <b>Quality Assurance:</b>
         <p className='text-gray-600'>At BuyMe, quality isn't just a promise — it's our foundation. We are committed to providing products that meet the highest standards of craftsmanship, durability, and style. Every item you see on our platform goes through a careful selection and inspection process to ensure it meets our strict quality benchmarks.</p>
       </div>
-      <div className='border border-gray-400 px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
+      <div className='border dark:text-white border-gray-400 px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
         <b>Convenience:</b>
         <p className='text-gray-600'>At BuyMe, we put you first — making your shopping experience fast, easy, and hassle-free. From a user-friendly interface to quick filters, secure checkout, and smooth navigation, everything is designed to save you time and effort.</p>
       </div>
-        <div className='border border-gray-400 px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
+        <div className='border dark:text-white border-gray-400 px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
         <b>Customer Service Like Never Before:</b>
         <p className='text-gray-600'>At BuyMe, we don’t just sell products — we build relationships. Our commitment to exceptional customer service is what truly sets us apart. Whether you have a question, a concern, or simply need a little help choosing the perfect product, our support team is always here — friendly, fast, and ready to assist.</p>
       </div>

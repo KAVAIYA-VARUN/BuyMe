@@ -234,7 +234,7 @@ const PlaceOrder = () =>
                     </p>
                     )}
                     <div className='w-full text-end mt-8'>
-                        <button type='submit' disabled={hasOutOfStock} className='bg-black text-white px-16 py-3 text-sm'>PLACE ORDER</button>
+                        <button type='submit' disabled={hasOutOfStock} className='bg-black dark:hover:bg-green-600 text-white px-16 py-3 text-sm'>PLACE ORDER</button>
                     </div>
                 </div>
             </div>
@@ -243,7 +243,7 @@ const PlaceOrder = () =>
         {/* Modal */}
         {modalOpen &&
               <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 overflow-auto">
-                  <div className="bg-[#FCD8CD] p-6 w-11/12 md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-y-auto">
+                  <div className="bg-[#FCD8CD] dark:bg-gray-600 p-6 w-11/12 md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-y-auto">
                       <h2 className='text-xl font-semibold mb-3'>Confirm Your Order</h2>
                       <p className='mb-4 text-gray-700'>⚠️ Once the order is placed, you cannot cancel it after it is shipped.</p>
 
@@ -290,8 +290,8 @@ const PlaceOrder = () =>
 
                       {/* Modal Buttons */}
                       <div className='flex justify-end gap-3 mt-6'>
-                          <button onClick={closeModal} className='px-4 py-2 border rounded text-gray-700 bg-gray-200'>Cancel</button>
-                          <button onClick={confirmPlaceOrder} className='px-4 py-2 border rounded bg-green-600 text-white'>Confirm</button>
+                          <button onClick={closeModal} className='px-4 py-2 border rounded dark:hover:bg-red-500 text-gray-700 bg-gray-200'>Cancel</button>
+                          <button onClick={confirmPlaceOrder} className='px-4 py-2 border dark:hover:bg-green-600 rounded bg-green-600 text-white'>Confirm</button>
                       </div>
                   </div>
               </div>

@@ -90,7 +90,7 @@ const Cart = () => {
                   <p className='text-xs sm:text-lg font-medium'>{productData.name}</p>
                   <div className='flex items-center gap-5 mt-2'>
                     <p>{currency}{productData.price}</p>
-                    <p className='px-2 sm:px-3 sm:py-1 border bg-slate-300'>{item.size}</p>
+                    <p className='px-2 sm:px-3 sm:py-1 border dark:text-black bg-slate-300'>{item.size}</p>
                   </div>
                 </div>
               </div>
@@ -118,7 +118,7 @@ const Cart = () => {
           <div className='w-full sm:w-[450px]'>
             <CartTotal />
             <div className='w-full text-end'>
-              <button onClick={checkSignIn} className='bg-black text-white text-sm my-8 px-8 py-3'>PROCEED TO CHECKOUT</button>
+              <button onClick={checkSignIn} className='bg-black dark:hover:bg-green-600 text-white text-sm my-8 px-8 py-3'>PROCEED TO CHECKOUT</button>
             </div>
           </div>
         </div>

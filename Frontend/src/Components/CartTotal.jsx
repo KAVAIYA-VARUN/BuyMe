@@ -36,7 +36,7 @@ const CartTotal = () => {
                 <p>{currency}{delivery_fee}.00</p>
             </div>
             <hr className='border-1 border-gray-500' />
-            <div className='flex justify-between'>
+            <div className='flex justify-between dark:text-white'>
                 <b>TOTAL</b>
                 <b>{currency} {getCartAmount() === 0 ? 0 : getCartAmount() + delivery_fee}.00</b>
             </div>
