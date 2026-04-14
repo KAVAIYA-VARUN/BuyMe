@@ -109,10 +109,10 @@ const Profile = () => {
               <div className="bg-[#FCD8CD] dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">Profile Information</h2>
-                  <button onClick={() => navigate("/edit-profile")} className="ml-6 flex items-center space-x-2 text-black hover:text-blue-600 dark:text-blue-400">
+                  <button onClick={() => navigate("/edit-profile")} className="ml-6 flex items-center space-x-2 text-black hover:text-blue-600 dark:text-blue-400 bg-transparent dark:bg-transparent">
                     <UserPen className="h-4 w-4" /><span>Edit Profile</span>
                   </button>
-                  <button onClick={() => navigate("/address")} className="ml-6 flex items-center space-x-2 text-black hover:text-blue-600 dark:text-blue-400">
+                  <button onClick={() => navigate("/address")} className="ml-6 flex items-center space-x-2 text-black hover:text-blue-600 dark:text-blue-400 bg-transparent dark:bg-transparent">
                     <MapPin className="h-4 w-4" /><span>Add Address</span>
                   </button>
                 </div>
